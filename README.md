@@ -32,7 +32,7 @@ It can be used to create input files for the following finite element solvers:
 MeshPy can easily be adapted to create input files for other solvers.
 MeshPy is developed at the [Institute for Mathematics and Computer-Based Simulation (IMCS)](https://www.unibw.de/imcs-en) at the Universität der Bundeswehr München.
 
-# How to cite MeshPy?
+## How to cite MeshPy?
 
 Whenever you use or mention MeshPy in some sort of scientific document/publication/presentation, please cite MeshPy as described on the [MeshPy website](https://imcs-compsim.github.io/meshpy).
 
