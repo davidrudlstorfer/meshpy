@@ -25,27 +25,50 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-"""
-This script can be used to compile the cython code:
-> python setup.py build_ext --inplace
-"""
+"""Compile the Cython code."""
+
+import importlib.util
+from distutils.command.build_ext import build_ext
+from distutils.core import Distribution
+from distutils.extension import Extension
 
 import numpy as np
-from Cython.Build import cythonize
-from setuptools import Extension, setup
 
-extensions = [
-    Extension(
-        "meshpy.geometric_search.geometric_search_cython_lib",
-        ["src/meshpy/geometric_search/geometric_search_cython_lib.pyx"],
-        include_dirs=[np.get_include()],
+
+def compile_cython():
+    """Compile the Cython code.
+
+    Only compile the code if Cython is installed.
+    """
+
+    # Check if Cython is installed
+    if importlib.util.find_spec("Cython") is None:
+        return
+    else:
+        from Cython.Build import cythonize
+
+    # Define the Cython extension
+    extensions = [
+        Extension(
+            "meshpy.geometric_search.geometric_search_cython_lib",
+            ["src/meshpy/geometric_search/geometric_search_cython_lib.pyx"],
+            include_dirs=[np.get_include()],
+        )
+    ]
+
+    # Cythonize the extension
+    cythonized_extensions = cythonize(
+        extensions, build_dir="src/build/cython_generated_code", annotate=True
     )
-]
 
-setup(
-    ext_modules=cythonize(
-        extensions,
-        build_dir="src/build/cython_generated_code",
-        annotate=True,
-    ),
-)
+    # Create a Distribution object with the cythonized extensions
+    dist = Distribution({"ext_modules": cythonized_extensions})
+
+    # Set up and run the build_ext command from distutils
+    cmd = build_ext(dist)
+    cmd.ensure_finalized()
+    cmd.run()
+
+
+if __name__ == "__main__":
+    compile_cython()

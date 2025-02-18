@@ -1,50 +1,54 @@
 [build-system]
-requires = ["setuptools", "wheel", "cython", "numpy"]
+requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
-
-[project]
-name = "MeshPy"
-authors = [
-  {name = "Ivo Steinbrecher", email = "ivo.steinbrecher@unibw.de"},
-]
-description = "MeshPy: A beam finite element input generator"
-readme = "README.md"
-license = {file = "LICENSE"}
-dependencies = [
-  "autograd",
-  "black==22.12.0",
-  "Cython",
-  "geomdl",
-  "ipykernel",
-  "notebook",
-  "numpy",
-  "numpy-quaternion",
-  "pre-commit",
-  "pytest",
-  "pytest-cov",
-  "pyvista",
-  "pyvista_utils@git+https://github.com/isteinbrecher/pyvista_utils.git@main",
-  "scipy",
-  "splinepy",
-  "testbook",
-  "vtk"
-]
-
-dynamic = ["version"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["meshpy"]
 
+[project]
+name = "MeshPy"
+description = "MeshPy: A beam finite element input generator"
+authors = [{ name = "MeshPy Authors" }]
+version = "0.1.0"
+readme = "README.md"
+license = {file = "LICENSE"}
+dependencies = [
+  "autograd",
+  "geomdl",
+  "ipykernel",
+  "notebook",
+  "numpy",
+  "numpy-quaternion",
+  "pyvista",
+  "pyvista_utils@git+https://github.com/isteinbrecher/pyvista_utils.git@main",
+  "scipy",
+  "splinepy",
+  "vtk"
+]
+
+[project.scripts]
+compile-cython = "meshpy.geometric_search.compile_cython:compile_cython"
+
 [project.optional-dependencies]
-CI-CD = [
-  "coverage==7.4.4",
+cubitpy = ["cubitpy@git+https://github.com/imcs-compsim/cubitpy.git@main"]
+cython = ["cython"]
+dev = [
   "coverage-badge",
-  "cubitpy@git+https://github.com/imcs-compsim/cubitpy.git@main",
+  "coverage",
   "pdoc",
-  "setuptools", # Needed for coverage-badge
+  "pre-commit",
+  "pytest",
+  "pytest-cov",
   "testbook"
 ]
+
+[project.urls]
+Homepage = "https://imcs-compsim.github.io/meshpy/"
+Documentation = "https://imcs-compsim.github.io/meshpy/api-documentation/"
+Repository = "https://github.com/imcs-compsim/meshpy/"
+Issues = "https://github.com/imcs-compsim/meshpy/issues/"
+
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
