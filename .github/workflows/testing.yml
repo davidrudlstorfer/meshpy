@@ -133,3 +133,14 @@ jobs:
         with:
           name: ${{github.job}}-${{github.run_number}}
           path: ${{ env.PYTEST_TMPDIR }}
+
+  save-trigger:
+    name: Save trigger for upcoming jobs
+    runs-on: ubuntu-latest
+    outputs:
+      is_push: ${{ github.event_name == 'push' }}
+    steps:
+      - name: Set trigger output
+        id: set-trigger
+        run: |
+          echo "is_push=${{ github.event_name == 'push' }}" >> $GITHUB_OUTPUT
