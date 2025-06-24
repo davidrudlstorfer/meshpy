@@ -25,7 +25,7 @@ import json
 import shutil
 import subprocess
 from pathlib import Path
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Union
 
 import numpy as np
 import pytest
@@ -36,6 +36,10 @@ from vistools.vtk.compare_grids import compare_grids
 
 from meshpy.core.mesh import Mesh
 from meshpy.four_c.input_file import InputFile
+
+# GLOBAL DEFAULT TEST TOLERANCES
+RELATIVE_TOLERANCE = 1e-13
+ABSOLUTE_TOLERANCE = 1e-13
 
 
 @pytest.fixture(scope="function")
@@ -51,8 +55,8 @@ def assert_results_equal() -> Callable:
     def _assert_results_equal(
         reference: Union[Path, str, dict, list, np.ndarray, InputFile, Mesh],
         result: Union[Path, str, dict, list, np.ndarray, InputFile, Mesh],
-        rtol: float = 1e-05,
-        atol: float = 1e-08,
+        rtol: float = RELATIVE_TOLERANCE,
+        atol: float = ABSOLUTE_TOLERANCE,
     ) -> None:
         """Comparison between reference and result with relative or absolute
         tolerance.
@@ -94,16 +98,14 @@ def assert_results_equal() -> Callable:
     return _assert_results_equal
 
 
-def compare_vtk_files(
-    reference: Path, result: Path, rtol: Optional[float], atol: Optional[float]
-) -> None:
+def compare_vtk_files(reference: Path, result: Path, rtol: float, atol: float) -> None:
     """Compare two VTK files for equality within a given tolerance.
 
     Args:
         reference: The path to the reference VTK file.
         result: The path to the result VTK file to be compared.
-        rtol: The relative tolerance parameter.
-        atol: The absolute tolerance parameter.
+        rtol: The relative tolerance.
+        atol: The absolute tolerance.
     """
 
     def get_vtk(path: Path) -> vtk.vtkDataObject:
