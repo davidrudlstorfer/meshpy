@@ -48,3 +48,20 @@ jobs:
         with:
           name: ${{github.job}}-${{ matrix.os-version }}-python${{ matrix.python-version }}-${{github.run_number}}
           path: ${{ env.PYTEST_TMPDIR }}
+
+  set-flag-for-docu:
+    runs-on: ubuntu-latest
+    outputs:
+      build_docu: ${{ steps.set.outputs.build_docu }}
+    steps:
+      - name: Echo event
+        run: |
+          echo "Event: ${{ github.event_name }}"
+      - name: Set flag for documentation build
+        id: set
+        run: |
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            echo "build_docu=true" >> $GITHUB_OUTPUT
+          else
+            echo "build_docu=false" >> $GITHUB_OUTPUT
+          fi
