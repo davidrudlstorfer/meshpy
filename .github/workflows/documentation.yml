@@ -8,6 +8,12 @@ on:
     branches: [main]
 
 jobs:
+  echo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo event
+        run: |
+          echo "Event: ${{ github.event.workflow_run.event }}"
   build_documentation:
     name: Build documentation
     # Only run if a push to main occurred, do not run after nightly cron job
